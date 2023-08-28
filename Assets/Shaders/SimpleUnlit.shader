@@ -26,8 +26,8 @@ Shader"Sandbox/RandomShader"
 
 
 // ZWrite Off
-   //       ZTest Always
- //   ColorMask RA
+          ZTest Always
+    ColorMask RA
     
 
 
@@ -67,16 +67,17 @@ Shader"Sandbox/RandomShader"
                 FragInput o;
                 //v.vertex.xyz *= pow(sin(v.uv.x * _Time.z), 6);
                 //v.vertex.y += cos(v.uv.x + _Time.a);
+                o.normal = UnityObjectToWorldNormal(v.normal);
+    //v.vertex.xyz += o.normal * sin(_Time.a)*2;
                 //v.vertex.y *= cos(v.uv.x*_Foo + _Time.a);
                 //v.vertex.y += cos(v.uv.x * _Foo + _Time.a) * 1;
-                //float4 tex = tex2Dlod(_MainTex, float4(v.uv.xy, 0, 0));
-                //v.vertex.y += cos(v.uv.x * _Foo + _Time.a) 
-                //                * tex 
-                //                * cos(v.uv.y * _Foo + _Time.a);
+                float4 tex = tex2Dlod(_MainTex, float4(v.uv.xy, 0, 0));
+                v.vertex.y += cos(v.uv.x * _Foo + _Time.a) 
+                                * tex 
+                                * cos(v.uv.y * _Foo + _Time.a);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                //o.normal = UnityObjectToWorldNormal(v.normal);
-                o.normal = v.normal;
+               // o.normal = v.normal;
                 return o;
             }
 
@@ -90,12 +91,15 @@ Shader"Sandbox/RandomShader"
                 //col = smoothstep(0.5, 0.8, i.uv.x);
                 //return float4(i.uv.rrr, 1);
                 //return float4(i.uv.yyy, 1);
+               // return (float4(frac(i.uv * 100), 0, 1));
+    //return float4(cos(i.uv.rrr*10*pi), 1)*0.5+0.5;
+    return float4(i.normal, 1);
     
     
     
     
     
-                return float4(i.normal, 1);
+                //return float4(i.normal, 1);
     
     
     
@@ -107,7 +111,7 @@ Shader"Sandbox/RandomShader"
                 return sin((offset + i.uv.y + _Time.y ) * 3 * pi * 2) 
                                 * 0.5 + 0.5;*/
                 
-                return col.rgba;
+                //return col.rgba;
                 return (1, 1,1, 1);
                 //return col.rgba * col1.rgba;
                 return lerp(col.rgba, col1.rgba, frac(_Time.y));

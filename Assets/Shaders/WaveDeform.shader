@@ -90,7 +90,7 @@ Shader"Sandbox/WaveDeform"
                 //Make waves
                 v.vertex += deform
                                 * _Amp
-                                * pow(-DMap, 3);
+                                * pow(DMap, 3);
     
                 //Raise land
                 v.vertex.y += IHMap * _LandIntensity;
@@ -108,6 +108,9 @@ Shader"Sandbox/WaveDeform"
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
+    
+    
+
                   
                 float2 radial = i.uv * (1-i.uv) * 2;
                 //return float4(frac(radial.x * radial.y * tau * 25).xxx, 1);
